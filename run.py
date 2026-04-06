@@ -1,4 +1,5 @@
 from ebooklib import epub
+from pathlib import Path
 import os
 import re
 import sys
@@ -48,6 +49,18 @@ if __name__ == "__main__":
             ebook.set_title = b
             ebook.set_language("ja")
             ebook.add_author(a)
+
+            cover_path = next(
+                (
+                    f
+                    for f in Path(book_dir).iterdir()
+                    if f.is_file() and f.stem == "cover"
+                ),
+                None,
+            )
+            if cover_path is not None:
+                cover_file = cover_path.suffix
+                ebook.set_cover(cover_file, open(cover_path, "rb").read())
 
             chapt_spine = ["nav"]
 
